@@ -17,23 +17,23 @@ class MagicCardViewModel: ViewModel() {
     val showLoadingView: LiveData<Boolean> = _showLoadingView
 
     fun fetchMagicCards() {
-        val repository = Repository()
-        _showLoadingView.value = true
-
-        repository
-            .fetchData()
-            .map {
-                it.cards.map { magicCardResponse ->
-                    MagicCardEntity(
-                        magicCardResponse.name,
-                        magicCardResponse.type,
-                        magicCardResponse.rarity
-                    )
-                }
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(::success, ::error)
+//        val repository = Repository()
+//        _showLoadingView.value = true
+//
+//        repository
+//            .fetchData()
+//            .map {
+//                it.cards.map { magicCardResponse ->
+//                    MagicCardEntity(
+//                        magicCardResponse.name,
+//                        magicCardResponse.type,
+//                        magicCardResponse.rarity
+//                    )
+//                }
+//            }
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe(::success, ::error)
     }
 
     private fun success(magicCards: List<MagicCardEntity>) {
