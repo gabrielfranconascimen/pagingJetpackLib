@@ -6,11 +6,12 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pagingjetpackguilda.paging2.PagingMagicCardViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel = MagicCardViewModel()
+    private val viewModel = PagingMagicCardViewModel()
     private val adapter = MagicCardListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,27 +22,27 @@ class MainActivity : AppCompatActivity() {
         rvMagicCard.adapter = adapter
         rvMagicCard.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL))
 
-        viewModel.errorLoading.observe(this, Observer {
-            rvMagicCard.visibility = View.GONE
-            tvMessage.visibility = View.VISIBLE
-            tvMessage.text = it
-        } )
-
-        viewModel.listCards.observe(this, Observer {
-            rvMagicCard.visibility = View.VISIBLE
-            tvMessage.visibility = View.GONE
-            adapter.updateData(it)
-        })
-
-        viewModel.showLoadingView.observe(this, Observer {
-            val isVisible = if(it) View.VISIBLE else View.GONE
-            progressBar.visibility = isVisible
-        })
+//        viewModel.errorLoading.observe(this, Observer {
+//            rvMagicCard.visibility = View.GONE
+//            tvMessage.visibility = View.VISIBLE
+//            tvMessage.text = it
+//        } )
+//
+//        viewModel.listCards.observe(this, Observer {
+//            rvMagicCard.visibility = View.VISIBLE
+//            tvMessage.visibility = View.GONE
+//            adapter.updateData(it)
+//        })
+//
+//        viewModel.showLoadingView.observe(this, Observer {
+//            val isVisible = if(it) View.VISIBLE else View.GONE
+//            progressBar.visibility = isVisible
+//        })
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.fetchMagicCards()
+//        viewModel.fetchMagicCards()
     }
 
 }
