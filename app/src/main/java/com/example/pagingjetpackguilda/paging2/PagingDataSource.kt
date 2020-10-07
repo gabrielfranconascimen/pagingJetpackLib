@@ -1,5 +1,6 @@
 package com.example.pagingjetpackguilda.paging2
 
+import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import com.example.pagingjetpackguilda.MagicCardEntity
 import com.example.pagingjetpackguilda.MagicCardService
@@ -17,7 +18,7 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, MagicCardEntity>
     ) {
-        api.listCards("1", params.requestedLoadSize.toString())
+        api.listCards(1, params.requestedLoadSize)
             .map{cardsResponse ->
                 cardsResponse.cards.map { magicCardResponse ->
                     MagicCardEntity(
@@ -26,7 +27,6 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
                         magicCardResponse.rarity
                     )
                 }
-
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -34,16 +34,17 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
                 callback.onResult(it, 1, 2)
             }, onError = {
                 //TODO nothing for all
+                Log.i("errorF", it.message ?: "")
             })
 
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, MagicCardEntity>) {
-        TODO("Not yet implemented")
+        //nothing to do
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, MagicCardEntity>) {
-        api.listCards(params.key.toString(), params.requestedLoadSize.toString())
+        api.listCards(params.key, params.requestedLoadSize)
             .map {cardsResponses ->
                 val newList = arrayListOf<MagicCardEntity>()
                 cardsResponses.cards.map {cardResponse ->
@@ -59,6 +60,7 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
             .subscribeBy( onNext = {
                 callback.onResult(it, params.key)
             }, onError = {
+                Log.i("errorF", it.message ?: "")
                 //TODO nothing for all
             })
     }

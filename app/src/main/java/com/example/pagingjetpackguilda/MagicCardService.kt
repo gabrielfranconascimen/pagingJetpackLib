@@ -1,13 +1,12 @@
 package com.example.pagingjetpackguilda
 
-import io.reactivex.Observable
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
+import rx.Observable
 
 interface MagicCardService {
 
     @GET("/v1/cards?")
-    fun listCards( @Query("page") page: String,
-                   @Query("pageSize") pageSize: String): rx.Observable<CardsResponse>
+    fun listCards( @Query("page") page: Int,
+                   @Query("pageSize") pageSize: Int): Observable<CardsResponse>
 }
