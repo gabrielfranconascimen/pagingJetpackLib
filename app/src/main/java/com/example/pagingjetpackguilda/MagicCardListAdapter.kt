@@ -36,9 +36,20 @@ class MagicCardListAdapter : RecyclerView.Adapter<MagicCardViewHolder>() {
 class MagicCardViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(item: MagicCardEntity) {
-        itemView.tvName.text = item.name
-        itemView.tvType.text = item.type
-        itemView.tvRarity.text = item.rarity
+        val name = "Name: " + item.name
+        val type = "Type: " + item.type
+        val rarity = "Rarity: " + item.rarity
+
+        itemView.tvName.text = name
+        itemView.tvType.text = type
+        itemView.tvRarity.text = rarity
     }
 
+}
+
+class FooterNetworkViewHolder(view: View): RecyclerView.ViewHolder(view) {
+
+    fun bind() {
+
+    }
 }

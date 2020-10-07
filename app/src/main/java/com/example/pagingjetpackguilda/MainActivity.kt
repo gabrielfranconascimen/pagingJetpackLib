@@ -31,6 +31,11 @@ class MainActivity : AppCompatActivity() {
             tvMessage.visibility = View.GONE
             adapter.updateData(it)
         })
+
+        viewModel.showLoadingView.observe(this, {
+            val isVisible = if(it) View.VISIBLE else View.GONE
+            progressBar.visibility = isVisible
+        })
     }
 
     override fun onResume() {

@@ -8,15 +8,17 @@ import io.reactivex.schedulers.Schedulers
 
 class MagicCardViewModel: ViewModel() {
 
-
+    private val _showLoadingView = MutableLiveData<Boolean>()
     private val _listCards = MutableLiveData<List<MagicCardEntity>>()
     private val _errorLoading = MutableLiveData<String>()
 
     val listCards: LiveData<List<MagicCardEntity>> = _listCards
     val errorLoading: LiveData<String> = _errorLoading
+    val showLoadingView: LiveData<Boolean> = _showLoadingView
 
     fun fetchMagicCards() {
         val repository = Repository()
+        _showLoadingView.value = true
 
         repository
             .fetchData()
@@ -35,10 +37,12 @@ class MagicCardViewModel: ViewModel() {
     }
 
     private fun success(magicCards: List<MagicCardEntity>) {
+        _showLoadingView.value = false
         _listCards.value = magicCards
     }
 
     private fun error(throwable: Throwable) {
+        _showLoadingView.value = false
         _errorLoading.value = throwable.message
     }
 
