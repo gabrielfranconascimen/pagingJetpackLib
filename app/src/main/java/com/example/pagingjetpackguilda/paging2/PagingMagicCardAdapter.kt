@@ -1,12 +1,11 @@
 package com.example.pagingjetpackguilda.paging2
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.pagingjetpackguilda.*
 
-class PagingMagicCardAdapter:
+class PagingMagicCardAdapter(private val tryAgainCallback: () -> Unit):
     PagedListAdapter<MagicCardEntity, MagicCardsViewHolders>(magicCardCallback) {
 
     private var isLoading = false
@@ -19,7 +18,7 @@ class PagingMagicCardAdapter:
     override fun onBindViewHolder(holder: MagicCardsViewHolders, position: Int) {
         when (holder) {
             is MagicCardsViewHolders.FooterNetworkViewHolder ->
-                holder.bind(isLoading)
+                holder.bind(isLoading, tryAgainCallback)
 
             is MagicCardsViewHolders.MagicCardViewHolder ->
                 getItem(position)?.let {

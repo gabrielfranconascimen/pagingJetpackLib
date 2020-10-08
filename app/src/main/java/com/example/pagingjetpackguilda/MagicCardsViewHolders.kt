@@ -24,13 +24,16 @@ sealed class MagicCardsViewHolders(view: View): RecyclerView.ViewHolder(view) {
     }
 
     class FooterNetworkViewHolder(view: View) : MagicCardsViewHolders(view) {
-        fun bind(isLoading: Boolean) {
+        fun bind(isLoading: Boolean, tryAgainCallback: () -> Unit) {
             if (isLoading) {
                 itemView.errorGroup.visibility = View.GONE
                 itemView.footerProgressBar.visibility = View.VISIBLE
             } else {
                 itemView.errorGroup.visibility = View.VISIBLE
                 itemView.footerProgressBar.visibility = View.GONE
+                itemView.btnTryAgain.setOnClickListener {
+                    tryAgainCallback.invoke()
+                }
             }
         }
     }

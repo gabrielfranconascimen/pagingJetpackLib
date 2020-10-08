@@ -7,6 +7,7 @@ import com.example.pagingjetpackguilda.MagicCardEntity
 import com.example.pagingjetpackguilda.MagicCardService
 import com.example.pagingjetpackguilda.NetworkConnection
 import rx.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.functions.Action
 
 import rx.lang.kotlin.subscribeBy
 import rx.schedulers.Schedulers
@@ -17,6 +18,11 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
     val networkState = MutableLiveData<NetworkState>()
 
     private val api = NetworkConnection.getInstance().create(MagicCardService::class.java)
+
+    private var retry: Action? = null
+    fun tryAgain() {
+        retry?.run()
+    }
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
@@ -41,6 +47,7 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
                 initialState.postValue(NetworkState.LOADED)
             }, onError = {
                 //TODO nothing for all
+                retry = Action { loadInitial(params, callback) }
                 initialState.postValue(NetworkState.FAILED(it.message))
                 Log.i("errorF", it.message ?: "")
             })
@@ -69,6 +76,7 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
                 callback.onResult(it, params.key+1)
                 networkState.postValue(NetworkState.LOADED)
             }, onError = {
+                retry = Action { loadAfter(params, callback) }
                 Log.i("errorF", it.message ?: "")
                 networkState.postValue(NetworkState.FAILED(it.message))
                 //TODO nothing for all

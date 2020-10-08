@@ -7,7 +7,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.pagingjetpackguilda.MagicCardEntity
 
-class PagingMagicCardViewModel: ViewModel() {
+class PagingMagicCardViewModel : ViewModel() {
 
     var ordersLiveData: LiveData<PagedList<MagicCardEntity>>
     private val pagingDataSourceFactory = PagingDataSourceFactory()
@@ -26,10 +26,15 @@ class PagingMagicCardViewModel: ViewModel() {
 
     fun getInitialState(): LiveData<NetworkState> =
         Transformations.switchMap<PagingDataSource, NetworkState>(
-            pagingDataSourceFactory.dataSourceLiveData) { it.initialState }
+            pagingDataSourceFactory.dataSourceLiveData
+        ) { it.initialState }
 
     fun getNetworkState(): LiveData<NetworkState> =
         Transformations.switchMap<PagingDataSource, NetworkState>(
-            pagingDataSourceFactory.dataSourceLiveData) { it.networkState }
+            pagingDataSourceFactory.dataSourceLiveData
+        ) { it.networkState }
 
+    fun tryAgain() {
+        pagingDataSourceFactory.dataSourceLiveData.value?.tryAgain()
+    }
 }

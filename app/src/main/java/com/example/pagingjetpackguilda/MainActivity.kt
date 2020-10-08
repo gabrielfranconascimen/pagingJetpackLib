@@ -14,7 +14,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val viewModel = PagingMagicCardViewModel()
-    private val adapter = PagingMagicCardAdapter()
+    private val adapter = PagingMagicCardAdapter {
+        viewModel.tryAgain()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +26,10 @@ class MainActivity : AppCompatActivity() {
         rvMagicCard.adapter = adapter
         rvMagicCard.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL))
 
+        btnTryAgain.setOnClickListener {
+            viewModel.tryAgain()
+        }
+
         viewModel.ordersLiveData.observe(this, Observer {
             adapter.submitList(it)
         })
@@ -32,6 +38,7 @@ class MainActivity : AppCompatActivity() {
             when(initialState.status) {
                 NetworkState.Status.FAILED -> {
                     tvMessage.visibility = View.VISIBLE
+                    btnTryAgain.visibility = View.VISIBLE
                     rvMagicCard.visibility = View.GONE
                     progressBar.visibility = View.GONE
 
@@ -40,12 +47,14 @@ class MainActivity : AppCompatActivity() {
 
                 NetworkState.Status.RUNNING -> {
                     tvMessage.visibility = View.GONE
+                    btnTryAgain.visibility = View.GONE
                     rvMagicCard.visibility = View.GONE
                     progressBar.visibility = View.VISIBLE
                 }
 
                 NetworkState.Status.SUCCESS -> {
                     tvMessage.visibility = View.GONE
+                    btnTryAgain.visibility = View.GONE
                     rvMagicCard.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
                 }
