@@ -37,7 +37,7 @@ class PagingMagicCardAdapter:
     }
 
     fun updateState(networkState: NetworkState.Status, isLoading: Boolean) {
-        val previousState = networkState
+        val previousState = this.networkState
         val previousExtraRow = hasExtraRow()
 
         this.networkState =  networkState
