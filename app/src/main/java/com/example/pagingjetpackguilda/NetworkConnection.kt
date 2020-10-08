@@ -11,13 +11,12 @@ class NetworkConnection {
 
     companion object{
         private const val BASE_URL = "https://api.magicthegathering.io"
-        val gsonBuilder = GsonBuilder().setLenient().create()
 
         fun getInstance(): Retrofit {
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(OkHttpClient.Builder().readTimeout(30L, TimeUnit.SECONDS).build())
-                .addConverterFactory(GsonConverterFactory.create(gsonBuilder))
+                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
         }

@@ -46,7 +46,6 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, MagicCardEntity>) {
         api.listCards(params.key, params.requestedLoadSize)
             .map {cardsResponses ->
-                val newList = arrayListOf<MagicCardEntity>()
                 cardsResponses.cards.map {cardResponse ->
                     MagicCardEntity(
                         cardResponse.name,
@@ -58,7 +57,7 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy( onNext = {
-                callback.onResult(it, params.key)
+                callback.onResult(it, params.key+1)
             }, onError = {
                 Log.i("errorF", it.message ?: "")
                 //TODO nothing for all
