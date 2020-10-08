@@ -1,6 +1,7 @@
 package com.example.pagingjetpackguilda.paging2
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -9,6 +10,7 @@ import com.example.pagingjetpackguilda.MagicCardEntity
 class PagingMagicCardViewModel: ViewModel() {
 
     var ordersLiveData: LiveData<PagedList<MagicCardEntity>>
+    private val pagingDataSourceFactory = PagingDataSourceFactory()
 
     private val pageSize = 8
 
@@ -19,9 +21,11 @@ class PagingMagicCardViewModel: ViewModel() {
             .setEnablePlaceholders(false)
             .build()
 
-        val pagingDataSource = PagingDataSourceFactory()
-
-        ordersLiveData = LivePagedListBuilder(pagingDataSource, config).build()
+        ordersLiveData = LivePagedListBuilder(pagingDataSourceFactory, config).build()
     }
+
+    fun getInitialState(): LiveData<NetworkState> =
+        Transformations.switchMap<PagingDataSource, NetworkState>(
+            pagingDataSourceFactory.dataSourceLiveData) { it.initialState }
 
 }
