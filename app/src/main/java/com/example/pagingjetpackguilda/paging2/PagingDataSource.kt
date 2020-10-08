@@ -14,6 +14,8 @@ import rx.schedulers.Schedulers
 class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
 
     val initialState = MutableLiveData<NetworkState>()
+    val networkState = MutableLiveData<NetworkState>()
+
     private val api = NetworkConnection.getInstance().create(MagicCardService::class.java)
 
     override fun loadInitial(
@@ -50,7 +52,7 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, MagicCardEntity>) {
-        initialState.postValue(NetworkState.LOADING)
+        networkState.postValue(NetworkState.LOADING)
         api.listCards(params.key, params.requestedLoadSize)
             .map {cardsResponses ->
                 cardsResponses.cards.map {cardResponse ->
@@ -65,10 +67,10 @@ class PagingDataSource: PageKeyedDataSource<Int, MagicCardEntity>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy( onNext = {
                 callback.onResult(it, params.key+1)
-                initialState.postValue(NetworkState.LOADED)
+                networkState.postValue(NetworkState.LOADED)
             }, onError = {
                 Log.i("errorF", it.message ?: "")
-                initialState.postValue(NetworkState.FAILED(it.message))
+                networkState.postValue(NetworkState.FAILED(it.message))
                 //TODO nothing for all
             })
     }

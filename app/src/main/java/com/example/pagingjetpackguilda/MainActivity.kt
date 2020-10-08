@@ -51,5 +51,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        viewModel.getNetworkState().observe(this, Observer { networkState ->
+            adapter.updateState(networkState.status, networkState.status == NetworkState.Status.RUNNING)
+        })
     }
 }

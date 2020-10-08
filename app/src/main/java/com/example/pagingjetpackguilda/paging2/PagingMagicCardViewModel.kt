@@ -28,4 +28,8 @@ class PagingMagicCardViewModel: ViewModel() {
         Transformations.switchMap<PagingDataSource, NetworkState>(
             pagingDataSourceFactory.dataSourceLiveData) { it.initialState }
 
+    fun getNetworkState(): LiveData<NetworkState> =
+        Transformations.switchMap<PagingDataSource, NetworkState>(
+            pagingDataSourceFactory.dataSourceLiveData) { it.networkState }
+
 }
